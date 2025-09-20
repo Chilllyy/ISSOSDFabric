@@ -12,6 +12,9 @@
   "entrypoints": {
     "client": [
       "me.chillywilly.issosd.client.IssosdClient"
+    ],
+    "modmenu": [
+      "me.chillywilly.issosd.client.ISSModMenu"
     ]
   },
   "depends": {

@@ -19,6 +19,7 @@ repositories {
     // See https://docs.gradle.org/current/userguide/declaring_repositories.html
     // for more information about repositories.
     mavenCentral()
+    maven { url "https://maven.terraformersmc.com/releases/" }
 }
 
 dependencies {
@@ -31,6 +32,8 @@ dependencies {
 
     implementation "com.lightstreamer:ls-javase-client:5.2.1"
     shadow "com.lightstreamer:ls-javase-client:5.2.1"
+
+    modImplementation "com.terraformersmc:modmenu:${project.modmenu_version}"
 }
 
 shadowJar {
@@ -53,7 +56,8 @@ processResources {
     filesMatching("fabric.mod.json") {
         expand "version": project.version,
                 "minecraft_version": project.minecraft_version,
-                "loader_version": project.loader_version
+                "loader_version": project.loader_version,
+                "modmenu_version": project.modmenu_version
     }
 }
 
