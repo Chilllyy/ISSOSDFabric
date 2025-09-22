@@ -12,6 +12,8 @@ public class ISSModConfig {
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     private double pos_x;
     private double pos_y;
+    private String sound_namespace;
+    private String sound_id;
 
     public void load() {
         File folder = new File(MinecraftClient.getInstance().runDirectory, "config");
@@ -24,6 +26,9 @@ public class ISSModConfig {
             ISSModConfig obj = GSON.fromJson(fr, ISSModConfig.class);
             setX(obj.getX());
             setY(obj.getY());
+            setSoundNamespace(obj.getSoundNamespace());
+            setSoundID(obj.getSoundID());
+            check();
         } catch (Exception e) {
             IssosdClient.LOGGER.error("Failed to read file {}", file.getName(), e);
         }
@@ -47,6 +52,22 @@ public class ISSModConfig {
     public void reset() {
         pos_x = 0.5;
         pos_y = 0.0;
+        sound_namespace = "minecraft";
+        sound_id = "block.note_block.harp";
+    }
+
+    public void check() {
+        boolean save = false;
+        if (sound_namespace == null) {
+            sound_namespace = "minecraft";
+            save = true;
+        }
+        if (sound_id == null) {
+            sound_id = "block.note_block.harp";
+            save = true;
+        }
+
+        if (save) save();
     }
 
     public double getX() {
@@ -63,5 +84,29 @@ public class ISSModConfig {
 
     public void setY(double pos_y) {
         this.pos_y = pos_y;
+    }
+
+    public String getSoundNamespace() {
+        if (this.sound_namespace != null) {
+            this.sound_namespace = "minecraft";
+            return this.sound_namespace;
+        }
+        return this.sound_namespace;
+    }
+
+    public String getSoundID() {
+        if (this.sound_id != null) {
+            this.sound_id = "block.note_block.harp";
+            return this.sound_id;
+        }
+        return this.sound_id;
+    }
+
+    public void setSoundNamespace(String namespace) {
+        this.sound_namespace = namespace;
+    }
+
+    public void setSoundID(String ID) {
+        this.sound_id = ID;
     }
 }

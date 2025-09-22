@@ -9,7 +9,11 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.RenderPipelines;
 import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.render.RenderTickCounter;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvent;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Identifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,6 +30,7 @@ public class IssosdClient implements ClientModInitializer {
     public static Identifier texture;
     public static Identifier normal_texture = Identifier.of("issosd", "textures/gui/piss_icon.png");
     public static Identifier notif_texture = Identifier.of("issosd", "textures/gui/piss_icon_notif.png");
+    public static Identifier sound = Identifier.of("minecraft", "block.note_block.harp");
 
     @Override
     public void onInitializeClient() {
@@ -65,6 +70,11 @@ public class IssosdClient implements ClientModInitializer {
                 @Override
                 public void run() {
                     try {
+                        SoundEvent event = SoundEvent.of(sound);
+                        ClientPlayerEntity player = MinecraftClient.getInstance().player;
+                        if (!(player == null)) {
+                            player.playSoundToPlayer(SoundEvents.BLOCK_NOTE_BLOCK_HARP.value(), SoundCategory.UI, 1.0F, 1.0F); //Play sound
+                        }
                         IssosdClient.texture = IssosdClient.notif_texture; //Display notification texture for 5 seconds
                         Thread.sleep(5000);
                         IssosdClient.texture = IssosdClient.normal_texture;

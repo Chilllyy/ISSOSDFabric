@@ -1,5 +1,11 @@
 {
   "issosd.menu.title": "ISS Piss Display",
   "issosd.config.x": "X position",
-  "issosd.config.y": "Y position"
+  "issosd.config.y": "Y position",
+  "issosd.config.namespace": "Namespace",
+  "issosd.config.sound_id": "Sound ID",
+  "issosd.config.sound_test_button": "Test",
+  "issosd.config.reset_button": "Reset All",
+  "issosd.config.reset_button.tooltip": "Reset All Setting",
+  "issosd.sounds.notify": "ISS Piss Gauge Pings"
 }
