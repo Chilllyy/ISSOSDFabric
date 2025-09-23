@@ -63,7 +63,6 @@ public class IssosdClient implements ClientModInitializer {
     }
 
     public void update(String newValue) {
-        if (!checkMod()) return;
         try {
             float val = Float.parseFloat(newValue);
             value = val;
