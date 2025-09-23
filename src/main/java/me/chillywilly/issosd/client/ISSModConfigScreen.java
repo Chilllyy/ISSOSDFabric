@@ -4,10 +4,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.tooltip.Tooltip;
-import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.gui.widget.EditBoxWidget;
-import net.minecraft.client.gui.widget.SliderWidget;
-import net.minecraft.client.gui.widget.TextWidget;
+import net.minecraft.client.gui.widget.*;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
@@ -58,17 +55,37 @@ public class ISSModConfigScreen extends Screen {
         EditBoxWidget widget_soundID = new EditBoxWidget.Builder().x(centerX - 120 + 80).y(baseY + 80).placeholder(Text.translatable("issosd.config.sound_id")).textShadow(true).build(MinecraftClient.getInstance().textRenderer, 120, 20, Text.of(""));
         widget_soundID.setText(IssosdClient.config.getSoundID());
 
+        ButtonWidget widget_toggleSoundButton = new ButtonWidget.Builder(
+                Text.translatable("issosd.config.sound_enabled.text." + String.valueOf(IssosdClient.config.getSoundEnabled())),
+                btn -> {
+                    IssosdClient.config.setSoundEnabled(!IssosdClient.config.getSoundEnabled());
+                    btn.setMessage(Text.translatable("issosd.config.sound_enabled.text." + String.valueOf(IssosdClient.config.getSoundEnabled())));
+                })
+                .position(centerX - 200, baseY + 80)
+                .width(70)
+                .build();
+
         ButtonWidget widget_testSoundButton = new ButtonWidget.Builder(Text.translatable("issosd.config.sound_test_button"), btn -> {
             try {
                 Identifier sound_identifier = Identifier.of(widget_namespace.getText(), widget_soundID.getText());
                 ClientPlayerEntity player = MinecraftClient.getInstance().player;
-                if (player != null) {
+                if (player != null && IssosdClient.instance.checkSound()) {
                     player.playSoundToPlayer(SoundEvent.of(sound_identifier), SoundCategory.UI, 1.0F, 1.0F);
                 }
             } catch(InvalidIdentifierException e) {
                 IssosdClient.LOGGER.warn("Invalid identifier {}", e.getMessage(), e);
             }
         }).position(centerX - 120 + 80 + 130, baseY + 80).width(50).build();
+
+        ButtonWidget widget_toggleModButton = new ButtonWidget.Builder(
+                Text.translatable("issosd.config.mod_enabled.text." + String.valueOf(IssosdClient.config.getEnabled())),
+                btn -> {
+                    IssosdClient.config.setEnabled(!IssosdClient.config.getEnabled());
+                    btn.setMessage(Text.translatable("issosd.config.mod_enabled.text." + String.valueOf(IssosdClient.config.getEnabled())));
+                })
+                .position(centerX - 100, baseY + 120)
+                .width(70)
+                .build();
 
         ButtonWidget resetButton = new ButtonWidget.Builder(Text.translatable("issosd.config.reset_button"), btn -> {
             IssosdClient.config.reset();
@@ -81,6 +98,8 @@ public class ISSModConfigScreen extends Screen {
         this.addDrawableChild(widget_soundID);
         this.addDrawableChild(widget_testSoundButton);
         this.addDrawableChild(resetButton);
+        this.addDrawableChild(widget_toggleSoundButton);
+        this.addDrawableChild(widget_toggleModButton);
     }
 
     @Override

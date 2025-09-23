@@ -7,5 +7,9 @@
   "issosd.config.sound_test_button": "Test",
   "issosd.config.reset_button": "Reset All",
   "issosd.config.reset_button.tooltip": "Reset All Setting",
+  "issosd.config.sound_enabled.text.true": "Sound is On",
+  "issosd.config.sound_enabled.text.false": "Sound is Off",
+  "issosd.config.mod_enabled.text.true": "Mod Enabled",
+  "issosd.config.mod_enabled.text.false": "Mod Disabled",
   "issosd.sounds.notify": "ISS Piss Gauge Pings"
 }

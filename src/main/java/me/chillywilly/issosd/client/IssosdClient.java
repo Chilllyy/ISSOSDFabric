@@ -54,6 +54,7 @@ public class IssosdClient implements ClientModInitializer {
     }
 
     private static void render(DrawContext context, RenderTickCounter counter) {
+        if (!config.getEnabled()) return;
         int color = 0xFFA87132;
         int x_start = (int) (context.getScaledWindowWidth() * config.getX());
         int y_start = (int) (context.getScaledWindowHeight() * config.getY());
@@ -62,6 +63,7 @@ public class IssosdClient implements ClientModInitializer {
     }
 
     public void update(String newValue) {
+        if (!checkMod()) return;
         try {
             float val = Float.parseFloat(newValue);
             value = val;
@@ -72,8 +74,8 @@ public class IssosdClient implements ClientModInitializer {
                     try {
                         SoundEvent event = SoundEvent.of(sound);
                         ClientPlayerEntity player = MinecraftClient.getInstance().player;
-                        if (!(player == null)) {
-                            player.playSoundToPlayer(SoundEvents.BLOCK_NOTE_BLOCK_HARP.value(), SoundCategory.UI, 1.0F, 1.0F); //Play sound
+                        if (player != null && checkSound()) {
+                            player.playSoundToPlayer(event, SoundCategory.UI, 1.0F, 1.0F); //Play sound
                         }
                         IssosdClient.texture = IssosdClient.notif_texture; //Display notification texture for 5 seconds
                         Thread.sleep(5000);
@@ -86,5 +88,13 @@ public class IssosdClient implements ClientModInitializer {
         } catch(NumberFormatException e) {
             LOGGER.warn("Number provided is not a number: {}", newValue);
         }
+    }
+
+    public boolean checkSound() {
+        return checkMod() && config.getSoundEnabled();
+    }
+
+    public boolean checkMod() {
+        return config.getEnabled();
     }
 }

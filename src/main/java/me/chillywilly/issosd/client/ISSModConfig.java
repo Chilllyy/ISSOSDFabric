@@ -14,6 +14,8 @@ public class ISSModConfig {
     private double pos_y;
     private String sound_namespace;
     private String sound_id;
+    public boolean mod_enabled;
+    public boolean sound_enabled;
 
     public void load() {
         File folder = new File(MinecraftClient.getInstance().runDirectory, "config");
@@ -28,6 +30,8 @@ public class ISSModConfig {
             setY(obj.getY());
             setSoundNamespace(obj.getSoundNamespace());
             setSoundID(obj.getSoundID());
+            setEnabled(obj.getEnabled());
+            setSoundEnabled(obj.getSoundEnabled());
             check();
         } catch (Exception e) {
             IssosdClient.LOGGER.error("Failed to read file {}", file.getName(), e);
@@ -54,6 +58,8 @@ public class ISSModConfig {
         pos_y = 0.0;
         sound_namespace = "minecraft";
         sound_id = "block.note_block.harp";
+        mod_enabled = true;
+        sound_enabled = true;
     }
 
     public void check() {
@@ -108,5 +114,21 @@ public class ISSModConfig {
 
     public void setSoundID(String ID) {
         this.sound_id = ID;
+    }
+
+    public boolean getEnabled() {
+        return mod_enabled;
+    }
+
+    public boolean getSoundEnabled() {
+        return sound_enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.mod_enabled = enabled;
+    }
+
+    public void setSoundEnabled(boolean enabled) {
+        this.sound_enabled = enabled;
     }
 }
