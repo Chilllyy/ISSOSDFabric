@@ -93,7 +93,7 @@ public class ISSModConfig {
     }
 
     public String getSoundNamespace() {
-        if (this.sound_namespace != null) {
+        if (this.sound_namespace == null) {
             this.sound_namespace = "minecraft";
             return this.sound_namespace;
         }
@@ -101,7 +101,7 @@ public class ISSModConfig {
     }
 
     public String getSoundID() {
-        if (this.sound_id != null) {
+        if (this.sound_id == null) {
             this.sound_id = "block.note_block.harp";
             return this.sound_id;
         }

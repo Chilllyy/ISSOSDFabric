@@ -15,6 +15,9 @@ import net.minecraft.util.InvalidIdentifierException;
 
 public class ISSModConfigScreen extends Screen {
     private final ISSModConfig config;
+    EditBoxWidget widget_namespace;
+    EditBoxWidget widget_soundID;
+
     public ISSModConfigScreen() {
         super(Text.translatable("issosd.menu.title"));
         this.config = IssosdClient.config;
@@ -50,15 +53,16 @@ public class ISSModConfigScreen extends Screen {
             }
         };
 
-        EditBoxWidget widget_namespace = new EditBoxWidget.Builder().x(centerX - 120).y(baseY + 80).placeholder(Text.translatable("issosd.config.namespace")).textShadow(true).build(MinecraftClient.getInstance().textRenderer, 70, 20, Text.of(""));
-        widget_namespace.setText(IssosdClient.config.getSoundNamespace());
-        EditBoxWidget widget_soundID = new EditBoxWidget.Builder().x(centerX - 120 + 80).y(baseY + 80).placeholder(Text.translatable("issosd.config.sound_id")).textShadow(true).build(MinecraftClient.getInstance().textRenderer, 120, 20, Text.of(""));
-        widget_soundID.setText(IssosdClient.config.getSoundID());
+        widget_namespace = new EditBoxWidget.Builder().x(centerX - 120).y(baseY + 80).placeholder(Text.translatable("issosd.config.namespace")).textShadow(true).build(MinecraftClient.getInstance().textRenderer, 70, 20, Text.of(""));
+        widget_namespace.setText(config.getSoundNamespace());
+        widget_soundID = new EditBoxWidget.Builder().x(centerX - 120 + 80).y(baseY + 80).placeholder(Text.translatable("issosd.config.sound_id")).textShadow(true).build(MinecraftClient.getInstance().textRenderer, 120, 20, Text.of(""));
+        widget_soundID.setText(config.getSoundID());
+
 
         ButtonWidget widget_toggleSoundButton = new ButtonWidget.Builder(
                 Text.translatable("issosd.config.sound_enabled.text." + String.valueOf(IssosdClient.config.getSoundEnabled())),
                 btn -> {
-                    IssosdClient.config.setSoundEnabled(!IssosdClient.config.getSoundEnabled());
+                    config.setSoundEnabled(!IssosdClient.config.getSoundEnabled());
                     btn.setMessage(Text.translatable("issosd.config.sound_enabled.text." + String.valueOf(IssosdClient.config.getSoundEnabled())));
                 })
                 .position(centerX - 200, baseY + 80)
@@ -80,7 +84,7 @@ public class ISSModConfigScreen extends Screen {
         ButtonWidget widget_toggleModButton = new ButtonWidget.Builder(
                 Text.translatable("issosd.config.mod_enabled.text." + String.valueOf(IssosdClient.config.getEnabled())),
                 btn -> {
-                    IssosdClient.config.setEnabled(!IssosdClient.config.getEnabled());
+                    config.setEnabled(!IssosdClient.config.getEnabled());
                     btn.setMessage(Text.translatable("issosd.config.mod_enabled.text." + String.valueOf(IssosdClient.config.getEnabled())));
                 })
                 .position(centerX - 100, baseY + 120)
@@ -88,7 +92,7 @@ public class ISSModConfigScreen extends Screen {
                 .build();
 
         ButtonWidget resetButton = new ButtonWidget.Builder(Text.translatable("issosd.config.reset_button"), btn -> {
-            IssosdClient.config.reset();
+            config.reset();
             MinecraftClient.getInstance().setScreen(new ISSModConfigScreen());
         }).position(centerX - 20, baseY + 120).width(50).tooltip(Tooltip.of(Text.translatable("issosd.config.reset_button.tooltip"))).build();
 
@@ -104,6 +108,8 @@ public class ISSModConfigScreen extends Screen {
 
     @Override
     public void removed() {
+        config.setSoundID(widget_soundID.getText());
+        config.setSoundNamespace(widget_namespace.getText());
         config.save();
     }
 }
