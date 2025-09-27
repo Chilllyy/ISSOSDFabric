@@ -94,11 +94,9 @@ public class IssosdClient implements ClientModInitializer {
                         if (val == old_value) return; //if value hasn't changed, skip all
                         if (val > old_value && checkUpSound()) {
                             playSoundToPlayer(config.getUpSound(), config.getUpSoundPitch());
-                            return;
                         }
                         if (val < old_value && checkDownSound()) {
                             playSoundToPlayer(config.getDownSound(), config.getDownSoundPitch());
-                            return;
                         }
                         IssosdClient.texture = IssosdClient.notif_texture; //Display notification texture for 5 seconds
                         Thread.sleep(5000);
