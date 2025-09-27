@@ -73,7 +73,7 @@ public class IssosdClient implements ClientModInitializer {
                     try {
                         SoundEvent event = SoundEvent.of(sound);
                         ClientPlayerEntity player = MinecraftClient.getInstance().player;
-                        if (player != null && checkSound()) {
+                        if (player != null) {
                             player.playSoundToPlayer(event, SoundCategory.UI, 1.0F, 1.0F); //Play sound
                         }
                         IssosdClient.texture = IssosdClient.notif_texture; //Display notification texture for 5 seconds
@@ -89,8 +89,12 @@ public class IssosdClient implements ClientModInitializer {
         }
     }
 
-    public boolean checkSound() {
-        return checkMod() && config.getSoundEnabled();
+    public boolean checkUpSound() {
+        return checkMod() && config.getUpSoundEnabled();
+    }
+
+    public boolean checkDownSound() {
+        return checkMod() && config.getDownSoundEnabled();
     }
 
     public boolean checkMod() {
