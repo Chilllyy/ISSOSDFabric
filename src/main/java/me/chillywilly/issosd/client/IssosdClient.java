@@ -60,15 +60,14 @@ public class IssosdClient implements ClientModInitializer {
 
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
             dispatcher.register(CommandManager.literal("issosd")
-                    .then(CommandManager.argument("display_num", IntegerArgumentType.integer()))
-                    .executes(IssosdClient::executeCommandWithArg));
+                    .then(CommandManager.argument("display_num", IntegerArgumentType.integer())
+                            .executes(IssosdClient::executeCommandWithArg)));
         });
     }
 
     private static int executeCommandWithArg(CommandContext<ServerCommandSource> context) {
         int value = IntegerArgumentType.getInteger(context, "display_num");
         IssosdClient.instance.update(String.valueOf(value));
-        context.getSource().sendFeedback(() -> Text.literal("Called /issosd with value = %s".formatted(value)), false);
         return 1;
     }
 
