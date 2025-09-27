@@ -30,7 +30,6 @@ public class IssosdClient implements ClientModInitializer {
     public static Identifier texture;
     public static Identifier normal_texture = Identifier.of("issosd", "textures/gui/piss_icon.png");
     public static Identifier notif_texture = Identifier.of("issosd", "textures/gui/piss_icon_notif.png");
-    public static Identifier sound = Identifier.of("minecraft", "block.note_block.harp");
 
     @Override
     public void onInitializeClient() {
@@ -65,16 +64,22 @@ public class IssosdClient implements ClientModInitializer {
     public void update(String newValue) {
         try {
             float val = Float.parseFloat(newValue);
+            float old_value = value;
             value = val;
             LOGGER.info("Received New Value: {}", newValue);
             new Thread() {
                 @Override
                 public void run() {
                     try {
-                        SoundEvent event = SoundEvent.of(sound);
-                        ClientPlayerEntity player = MinecraftClient.getInstance().player;
-                        if (player != null) {
-                            player.playSoundToPlayer(event, SoundCategory.UI, 1.0F, 1.0F); //Play sound
+                        Thread.sleep(2000); //wait 2 seconds and check again
+                        if (val == old_value) return; //if value hasn't changed, skip all
+                        if (val > old_value) {
+                            playSoundToPlayer(config.getUpSound(), config.getUpSoundPitch());
+                            return;
+                        }
+                        if (val < old_value) {
+                            playSoundToPlayer(config.getDownSound(), config.getDownSoundPitch());
+                            return;
                         }
                         IssosdClient.texture = IssosdClient.notif_texture; //Display notification texture for 5 seconds
                         Thread.sleep(5000);
@@ -87,6 +92,17 @@ public class IssosdClient implements ClientModInitializer {
         } catch(NumberFormatException e) {
             LOGGER.warn("Number provided is not a number: {}", newValue);
         }
+    }
+
+    private void playSoundToPlayer(Identifier sound, float pitch) {
+
+        ClientPlayerEntity player = MinecraftClient.getInstance().player;
+        if (player == null) {
+            LOGGER.warn("Player is null, something is very wrong");
+            return;
+        }
+
+        player.playSoundToPlayer(SoundEvent.of(sound), SoundCategory.UI, 1.0F, pitch);
     }
 
     public boolean checkUpSound() {
