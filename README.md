@@ -2,6 +2,12 @@
 I'm not really sure, I found the [ISS Piss Tracker](https://bsky.app/profile/iss-piss-tracker.bsky.social) on Bluesky and decided that it needed a minecraft version.
 This 1.21.8 Fabric mod renders a icon, you can modify where it is on screen
 
+Released on
+
+[Modrinth](https://modrinth.com/mod/issonscreendisplay)
+
+[Curseforge](https://www.curseforge.com/minecraft/mc-mods/issonscreendisplay)
+
 # Recommended mods
 [ModMenu](https://modrinth.com/mod/modmenu) (allows editing the config in-game)
 [Animatica](https://modrinth.com/mod/animatica) (Allows custom animated textures, the mod comes bundled with some extra textures)
