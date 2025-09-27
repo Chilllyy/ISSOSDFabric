@@ -73,11 +73,11 @@ public class IssosdClient implements ClientModInitializer {
                     try {
                         Thread.sleep(2000); //wait 2 seconds and check again
                         if (val == old_value) return; //if value hasn't changed, skip all
-                        if (val > old_value) {
+                        if (val > old_value && checkUpSound()) {
                             playSoundToPlayer(config.getUpSound(), config.getUpSoundPitch());
                             return;
                         }
-                        if (val < old_value) {
+                        if (val < old_value && checkDownSound()) {
                             playSoundToPlayer(config.getDownSound(), config.getDownSoundPitch());
                             return;
                         }
