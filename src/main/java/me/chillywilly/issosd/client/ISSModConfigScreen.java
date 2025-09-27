@@ -200,18 +200,20 @@ public class ISSModConfigScreen extends Screen {
             return;
         }
 
-        Identifier soundID = Identifier.of(split[0], split[1]);
         ClientPlayerEntity player = MinecraftClient.getInstance().player;
         if (player == null) {
-            IssosdClient.LOGGER.warn("Player is null, something is broken");
+            IssosdClient.LOGGER.warn("Player is null, you may not be on a world");;
             return;
         }
 
         try {
+            Identifier soundID = Identifier.of(split[0], split[1]);
             float pitch = Float.parseFloat(pitch_widget.getText());
             player.playSoundToPlayer(SoundEvent.of(soundID), SoundCategory.UI, 1.0F, pitch);
         } catch(NumberFormatException e) {
             IssosdClient.LOGGER.warn("Provided value is not a number: {}", pitch_widget.getText(), e);
+        } catch(Exception e) {
+            IssosdClient.LOGGER.warn("Exception occured during sound ID initialization: {}", e.getMessage(), e);
         }
     }
 

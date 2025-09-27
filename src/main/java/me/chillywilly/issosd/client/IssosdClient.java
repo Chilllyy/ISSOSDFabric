@@ -2,18 +2,25 @@ package me.chillywilly.issosd.client;
 
 import com.lightstreamer.client.LightstreamerClient;
 import com.lightstreamer.client.Subscription;
+import com.mojang.brigadier.arguments.IntegerArgumentType;
+import com.mojang.brigadier.context.CommandContext;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.hud.VanillaHudElements;
+import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.RenderPipelines;
 import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.network.ClientCommandSource;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.render.RenderTickCounter;
+import net.minecraft.server.command.CommandManager;
+import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,6 +57,19 @@ public class IssosdClient implements ClientModInitializer {
         sub.addListener(new ISSSubListener());
         texture = IssosdClient.normal_texture;
         HudElementRegistry.attachElementBefore(VanillaHudElements.CHAT, Identifier.of("issosd", "pissdisplay"), IssosdClient::render);
+
+        CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
+            dispatcher.register(CommandManager.literal("issosd")
+                    .then(CommandManager.argument("display_num", IntegerArgumentType.integer()))
+                    .executes(IssosdClient::executeCommandWithArg));
+        });
+    }
+
+    private static int executeCommandWithArg(CommandContext<ServerCommandSource> context) {
+        int value = IntegerArgumentType.getInteger(context, "display_num");
+        IssosdClient.instance.update(String.valueOf(value));
+        context.getSource().sendFeedback(() -> Text.literal("Called /issosd with value = %s".formatted(value)), false);
+        return 1;
     }
 
     private static void render(DrawContext context, RenderTickCounter counter) {
@@ -98,7 +118,7 @@ public class IssosdClient implements ClientModInitializer {
 
         ClientPlayerEntity player = MinecraftClient.getInstance().player;
         if (player == null) {
-            LOGGER.warn("Player is null, something is very wrong");
+            LOGGER.warn("Player is null, you may not be on a world");
             return;
         }
 

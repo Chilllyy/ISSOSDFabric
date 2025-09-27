@@ -107,7 +107,11 @@ public class ISSModConfig {
         check();
         String[] up_sound_split = up_sound.split(":");
         if (up_sound_split.length == 2) {
-            return Identifier.of(up_sound_split[0], up_sound_split[1]);
+            try {
+                return Identifier.of(up_sound_split[0], up_sound_split[1]);
+            } catch(Exception e) {
+                IssosdClient.LOGGER.warn("Exception occured during sound ID initialization: {}", e.getMessage(), e);
+            }
         }
         return Identifier.of("unset", "unset");
     }
@@ -116,7 +120,11 @@ public class ISSModConfig {
         check();
         String[] down_sound_split = down_sound.split(":");
         if (down_sound_split.length == 2) {
-            return Identifier.of(down_sound_split[0], down_sound_split[1]);
+            try {
+                return Identifier.of(down_sound_split[0], down_sound_split[1]);
+            } catch(Exception e) {
+                IssosdClient.LOGGER.warn("Exception occured during sound ID initialization: {}", e.getMessage(), e);
+            }
         }
         return Identifier.of("unset", "unset");
     }
