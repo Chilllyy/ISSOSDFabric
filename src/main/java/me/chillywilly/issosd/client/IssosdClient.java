@@ -51,8 +51,6 @@ public class IssosdClient implements ClientModInitializer {
         Subscription sub = new Subscription("MERGE", items, fields);
         sub.setRequestedSnapshot("yes");
         client.subscribe(sub);
-        animate = FabricLoader.getInstance().isModLoaded("animatica");
-        LOGGER.info("Animate loaded {}", animate);
 
         sub.addListener(new ISSSubListener());
         texture = IssosdClient.normal_texture;
