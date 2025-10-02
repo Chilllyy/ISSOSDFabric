@@ -23,6 +23,9 @@ Released on
 - Reset All (Resets all options)
 ![config.png](config.png)
 
+# Advertisement
+https://youtu.be/JwjpDEqPBoI
+
 # How to Build
 Make sure you have JDK 21 installed, I recommend [Adoptium](https://adoptium.net/temurin/releases?version=21&os=any&arch=any)
 ```
