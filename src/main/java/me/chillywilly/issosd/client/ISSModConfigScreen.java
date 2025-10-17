@@ -126,7 +126,7 @@ public class ISSModConfigScreen extends Screen {
         widget_downsound_pitch = new EditBoxWidget(MinecraftClient.getInstance().textRenderer,
                 centerX + 85,
                 baseY + 120,
-                120,
+                30,
                 20,
                 Text.translatable("issosd.config.downsound_pitch"),
                 Text.of("")
