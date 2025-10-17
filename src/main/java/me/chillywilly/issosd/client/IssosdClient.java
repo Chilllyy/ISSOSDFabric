@@ -5,27 +5,21 @@ import com.lightstreamer.client.Subscription;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import net.fabricmc.api.ClientModInitializer;
-import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry;
-import net.fabricmc.fabric.api.client.rendering.v1.hud.VanillaHudElements;
+import net.fabricmc.fabric.api.client.rendering.v1.HudLayerRegistrationCallback;
+import net.fabricmc.fabric.api.client.rendering.v1.IdentifiedLayer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
-import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gl.RenderPipelines;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.network.ClientCommandSource;
 import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.RenderTickCounter;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.concurrent.TimeUnit;
 
 public class IssosdClient implements ClientModInitializer {
     public static final Logger LOGGER = LoggerFactory.getLogger("issosd");
@@ -37,6 +31,7 @@ public class IssosdClient implements ClientModInitializer {
     public static Identifier texture;
     public static Identifier normal_texture = Identifier.of("issosd", "textures/gui/piss_icon.png");
     public static Identifier notif_texture = Identifier.of("issosd", "textures/gui/piss_icon_notif.png");
+    private static final Identifier RENDER_LAYER = Identifier.of("issosd", "piss-display-hud-icon");
 
     @Override
     public void onInitializeClient() {
@@ -54,7 +49,8 @@ public class IssosdClient implements ClientModInitializer {
 
         sub.addListener(new ISSSubListener());
         texture = IssosdClient.normal_texture;
-        HudElementRegistry.attachElementBefore(VanillaHudElements.CHAT, Identifier.of("issosd", "pissdisplay"), IssosdClient::render);
+
+        HudLayerRegistrationCallback.EVENT.register(layeredDrawer -> layeredDrawer.attachLayerBefore(IdentifiedLayer.CHAT, RENDER_LAYER, IssosdClient::render));
 
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
             dispatcher.register(CommandManager.literal("issosd")
@@ -74,7 +70,7 @@ public class IssosdClient implements ClientModInitializer {
         int color = 0xFFA87132;
         int x_start = (int) (context.getScaledWindowWidth() * config.getX());
         int y_start = (int) (context.getScaledWindowHeight() * config.getY());
-        context.drawTexture(RenderPipelines.GUI_TEXTURED, IssosdClient.texture, x_start, y_start, 0, 0, 16, 16, 16, 16);
+        context.drawTexture(RenderLayer::getGuiTextured, IssosdClient.texture, x_start, y_start, 0, 0, 16, 16, 16, 16);
         context.drawText(MinecraftClient.getInstance().textRenderer, IssosdClient.instance.value + "%", x_start + 20, y_start + 4, color, true);
     }
 
@@ -117,7 +113,7 @@ public class IssosdClient implements ClientModInitializer {
             return;
         }
 
-        player.playSoundToPlayer(SoundEvent.of(sound), SoundCategory.UI, 1.0F, pitch);
+        player.playSoundToPlayer(SoundEvent.of(sound), SoundCategory.NEUTRAL, 1.0F, pitch);
     }
 
     public boolean checkUpSound() {
