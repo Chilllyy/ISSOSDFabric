@@ -1,18 +1,18 @@
 package me.chillywilly.issosd.client;
 
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.EditBox;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.tooltip.Tooltip;
-import net.minecraft.client.gui.widget.*;
+import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.gui.widget.EditBoxWidget;
+import net.minecraft.client.gui.widget.SliderWidget;
+import net.minecraft.client.gui.widget.TextWidget;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
-import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.InvalidIdentifierException;
 
 public class ISSModConfigScreen extends Screen {
     private final ISSModConfig config;
@@ -58,19 +58,26 @@ public class ISSModConfigScreen extends Screen {
             }
         };
 
-        widget_upsound = new EditBoxWidget.Builder()
-                .x(centerX - 100)
-                .y(baseY + 80)
-                .placeholder(Text.translatable("issosd.config.upsound"))
-                .textShadow(true)
-                .build(MinecraftClient.getInstance().textRenderer, 180, 20, Text.of(""));
+        widget_upsound = new EditBoxWidget(MinecraftClient.getInstance().textRenderer,
+                centerX - 100,
+                baseY + 80,
+                180,
+                20,
+                Text.translatable("issosd.config.upsound"),
+                Text.of("")
+        );
+
         widget_upsound.setText(config.getUpSoundRaw());
 
-        widget_upsound_pitch = new EditBoxWidget.Builder()
-                .x(centerX + 85)
-                .y(baseY + 80)
-                .placeholder(Text.translatable("issosd.config.upsound_pitch"))
-                .build(MinecraftClient.getInstance().textRenderer, 30, 20, Text.of(""));
+        widget_upsound_pitch = new EditBoxWidget(MinecraftClient.getInstance().textRenderer,
+                centerX + 85,
+                baseY + 80,
+                30,
+                20,
+                Text.translatable("issosd.config.upsound_pitch"),
+                Text.of("")
+        );
+
         widget_upsound_pitch.setText(String.valueOf(config.getUpSoundPitch()));
 
         TextWidget label_upsound = new TextWidget(
@@ -106,21 +113,25 @@ public class ISSModConfigScreen extends Screen {
         }).position(centerX + 130, baseY + 80).width(50).build();
 
 
-
-
-        widget_downsound = new EditBoxWidget.Builder()
-                .x(centerX - 100)
-                .y(baseY + 120)
-                .placeholder(Text.translatable("issosd.config.downsound"))
-                .textShadow(true)
-                .build(MinecraftClient.getInstance().textRenderer, 180, 20, Text.of(""));
+        widget_downsound = new EditBoxWidget(MinecraftClient.getInstance().textRenderer,
+                centerX - 100,
+                baseY + 120,
+                180,
+                20,
+                Text.translatable("issosd.config.downsound"),
+                Text.of("")
+        );
         widget_downsound.setText(config.getDownSoundRaw());
 
-        widget_downsound_pitch = new EditBoxWidget.Builder()
-                .x(centerX + 85)
-                .y(baseY + 120)
-                .placeholder(Text.translatable("issosd.config.downsound_pitch"))
-                .build(MinecraftClient.getInstance().textRenderer, 30, 20, Text.of(""));
+        widget_downsound_pitch = new EditBoxWidget(MinecraftClient.getInstance().textRenderer,
+                centerX + 85,
+                baseY + 120,
+                120,
+                20,
+                Text.translatable("issosd.config.downsound_pitch"),
+                Text.of("")
+        );
+
         widget_downsound_pitch.setText(String.valueOf(config.getDownSoundPitch()));
 
         TextWidget label_downsound = new TextWidget(
@@ -209,7 +220,7 @@ public class ISSModConfigScreen extends Screen {
         try {
             Identifier soundID = Identifier.of(split[0], split[1]);
             float pitch = Float.parseFloat(pitch_widget.getText());
-            player.playSoundToPlayer(SoundEvent.of(soundID), SoundCategory.UI, 1.0F, pitch);
+            player.playSoundToPlayer(SoundEvent.of(soundID), SoundCategory.AMBIENT, 1.0F, pitch);
         } catch(NumberFormatException e) {
             IssosdClient.LOGGER.warn("Provided value is not a number: {}", pitch_widget.getText(), e);
         } catch(Exception e) {
