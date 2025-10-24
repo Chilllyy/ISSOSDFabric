@@ -11,7 +11,7 @@ jobs:
     permissions:
       contents: write
     steps:
-      - uses: Kir-Antipov/mc-publish@v3.3
+      - uses: Kir-Antipov/mc-publish@v3.3.0
         with:
           # Only include this section if you wish to publish
           # your assets on Modrinth.
