@@ -8,6 +8,7 @@ import net.minecraft.client.gui.widget.EditBoxWidget;
 import net.minecraft.client.gui.widget.SliderWidget;
 import net.minecraft.client.gui.widget.TextWidget;
 import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.client.sound.SoundInstance;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.text.Text;
@@ -208,7 +209,7 @@ public class ISSModConfigScreen extends Screen {
         try {
             Identifier soundID = Identifier.of(split[0], split[1]);
             float pitch = Float.parseFloat(pitch_widget.getText());
-            player.playSoundToPlayer(SoundEvent.of(soundID), SoundCategory.UI, 1.0F, pitch);
+            player.playSound(SoundEvent.of(soundID), 1.0F, pitch);
         } catch(NumberFormatException e) {
             IssosdClient.LOGGER.warn("Provided value is not a number: {}", pitch_widget.getText(), e);
         } catch(Exception e) {

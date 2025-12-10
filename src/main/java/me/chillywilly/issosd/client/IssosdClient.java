@@ -117,7 +117,7 @@ public class IssosdClient implements ClientModInitializer {
             return;
         }
 
-        player.playSoundToPlayer(SoundEvent.of(sound), SoundCategory.UI, 1.0F, pitch);
+        player.playSound(SoundEvent.of(sound), 1.0F, pitch);
     }
 
     public boolean checkUpSound() {
