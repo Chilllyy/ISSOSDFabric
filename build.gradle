@@ -33,8 +33,8 @@ dependencies {
     include "com.lightstreamer:ls-javase-client:5.2.1"
     include "com.squareup.okhttp3:okhttp-urlconnection:4.12.0"
     include "com.squareup.okhttp3:okhttp:4.12.0"
-    include "com.fasterxml.jackson.core:jackson-core:2.14.3"
-    include "com.fasterxml.jackson.core:jackson-databind:2.14.3"
+    include "com.fasterxml.jackson.core:jackson-core:2.21.0"
+    include "com.fasterxml.jackson.core:jackson-databind:2.21.0"
     include "com.squareup.okio:okio-jvm:3.6.0"
     include "com.squareup.okio:okio:3.6.0"
 
