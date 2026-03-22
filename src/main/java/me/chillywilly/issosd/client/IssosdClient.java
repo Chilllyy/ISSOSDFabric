@@ -8,24 +8,17 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.hud.VanillaHudElements;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
-import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gl.RenderPipelines;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.network.ClientCommandSource;
-import net.minecraft.client.network.ClientPlayerEntity;
-import net.minecraft.client.render.RenderTickCounter;
-import net.minecraft.server.command.CommandManager;
-import net.minecraft.server.command.ServerCommandSource;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.DeltaTracker;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.client.renderer.RenderPipelines;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
+import net.minecraft.resources.Identifier;
+import net.minecraft.sounds.SoundEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.concurrent.TimeUnit;
 
 public class IssosdClient implements ClientModInitializer {
     public static final Logger LOGGER = LoggerFactory.getLogger("issosd");
@@ -35,8 +28,8 @@ public class IssosdClient implements ClientModInitializer {
     public static IssosdClient instance;
     public boolean animate = false;
     public static Identifier texture;
-    public static Identifier normal_texture = Identifier.of("issosd", "textures/gui/piss_icon.png");
-    public static Identifier notif_texture = Identifier.of("issosd", "textures/gui/piss_icon_notif.png");
+    public static Identifier normal_texture = Identifier.fromNamespaceAndPath("issosd", "textures/gui/piss_icon.png");
+    public static Identifier notif_texture = Identifier.fromNamespaceAndPath("issosd", "textures/gui/piss_icon_notif.png");
 
     @Override
     public void onInitializeClient() {
@@ -54,28 +47,28 @@ public class IssosdClient implements ClientModInitializer {
 
         sub.addListener(new ISSSubListener());
         texture = IssosdClient.normal_texture;
-        HudElementRegistry.attachElementBefore(VanillaHudElements.CHAT, Identifier.of("issosd", "pissdisplay"), IssosdClient::render);
+        HudElementRegistry.attachElementBefore(VanillaHudElements.CHAT, Identifier.fromNamespaceAndPath("issosd", "pissdisplay"), IssosdClient::render);
 
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
-            dispatcher.register(CommandManager.literal("issosd")
-                    .then(CommandManager.argument("display_num", IntegerArgumentType.integer())
+            dispatcher.register(Commands.literal("issosd")
+                    .then(Commands.argument("display_num", IntegerArgumentType.integer())
                             .executes(IssosdClient::executeCommandWithArg)));
         });
     }
 
-    private static int executeCommandWithArg(CommandContext<ServerCommandSource> context) {
+    private static int executeCommandWithArg(CommandContext<CommandSourceStack> context) {
         int value = IntegerArgumentType.getInteger(context, "display_num");
         IssosdClient.instance.update(String.valueOf(value));
         return 1;
     }
 
-    private static void render(DrawContext context, RenderTickCounter counter) {
+    private static void render(GuiGraphics context, DeltaTracker counter) {
         if (!config.getEnabled()) return;
         int color = 0xFFA87132;
-        int x_start = (int) (context.getScaledWindowWidth() * config.getX());
-        int y_start = (int) (context.getScaledWindowHeight() * config.getY());
-        context.drawTexture(RenderPipelines.GUI_TEXTURED, IssosdClient.texture, x_start, y_start, 0, 0, 16, 16, 16, 16);
-        context.drawText(MinecraftClient.getInstance().textRenderer, IssosdClient.instance.value + "%", x_start + 20, y_start + 4, color, true);
+        int x_start = (int) (context.guiWidth() * config.getX());
+        int y_start = (int) (context.guiHeight() * config.getY());
+        context.blit(RenderPipelines.GUI_TEXTURED, IssosdClient.texture, x_start, y_start, 0, 0, 16, 16, 16, 16);
+        context.drawString(Minecraft.getInstance().font, IssosdClient.instance.value + "%", x_start + 20, y_start + 4, color, true);
     }
 
     public void update(String newValue) {
@@ -111,13 +104,13 @@ public class IssosdClient implements ClientModInitializer {
 
     private void playSoundToPlayer(Identifier sound, float pitch) {
 
-        ClientPlayerEntity player = MinecraftClient.getInstance().player;
+        LocalPlayer player = Minecraft.getInstance().player;
         if (player == null) {
             LOGGER.warn("Player is null, you may not be on a world");
             return;
         }
 
-        player.playSound(SoundEvent.of(sound), 1.0F, pitch);
+        player.playSound(SoundEvent.createVariableRangeEvent(sound), 1.0F, pitch);
     }
 
     public boolean checkUpSound() {
