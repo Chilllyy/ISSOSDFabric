@@ -22,8 +22,5 @@
     "fabric-api": "*",
     "fabric-language-kotlin": ">=${fabric_language_kotlin_version}",
     "minecraft": "26.1-rc.2"
-  },
-  "suggests": {
-    "animatica": "*"
   }
 }
