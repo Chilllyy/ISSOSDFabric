@@ -19,6 +19,7 @@ public class ISSModConfig {
     public boolean mod_enabled;
     public boolean up_sound_enabled;
     public boolean down_sound_enabled;
+    public String server_url = "https://iss.chillywilly.me/";
 
     public void load() {
         File folder = new File(Minecraft.getInstance().gameDirectory, "config");
@@ -38,6 +39,7 @@ public class ISSModConfig {
             setEnabled(obj.getEnabled());
             setUpSoundEnabled(obj.getUpSoundEnabled());
             setDownSoundEnabled(obj.getDownSoundEnabled());
+            server_url = obj.server_url;
             check();
         } catch (Exception e) {
             IssosdClient.LOGGER.error("Failed to read file {}", file.getName(), e);
