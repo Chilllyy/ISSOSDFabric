@@ -12,6 +12,7 @@ public class SpacemanHudElement implements HudElement {
     public Identifier texture;
     public SpacemanHudElement(Identifier texture) {
         config = IssosdClient.config;
+        this.texture = texture;
     }
     @Override
     public void extractRenderState(GuiGraphicsExtractor guiGraphicsExtractor, DeltaTracker deltaTracker) {
