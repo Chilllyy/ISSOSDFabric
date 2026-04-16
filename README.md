@@ -23,6 +23,11 @@ Released on
 - Reset All (Resets all options)
 ![config.png](config.png)
 
+# Normalizer Server
+- The Normalizer Server sits between Lightstreamer and all ISS Mods, it allows me to handle Lightstreamer jitter and makes it easier to implement the mod on different games/platforms
+- If you want to self host, there is a repository at https://github.com/Chilllyy/ISSNormalizeServer that is the normalizer server
+- you can edit the config file directly to point the mod to a different web address
+
 # Advertisement
 https://youtu.be/JwjpDEqPBoI
 
