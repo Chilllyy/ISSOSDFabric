@@ -12,6 +12,9 @@ Released on
 [ModMenu](https://modrinth.com/mod/modmenu) (allows editing the config in-game)
 [Animatica](https://modrinth.com/mod/animatica) (Allows custom animated textures, the mod comes bundled with some extra textures)
 
+# In Game Photo
+![Ingame Photo](ingame.png)
+
 # Configuration Options
 - X Position (Relative Position on screen)
 - Y Position (Relative Position on screen)
