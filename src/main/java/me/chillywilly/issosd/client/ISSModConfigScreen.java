@@ -166,7 +166,7 @@ public class ISSModConfigScreen extends Screen {
         Button resetButton = new Button.Builder(Component.translatable("issosd.config.reset_button"), btn -> {
             config.reset();
             closing = true;
-            Minecraft.getInstance().setScreen(new ISSModConfigScreen());
+            Minecraft.getInstance().setScreenAndShow(new ISSModConfigScreen());
         }).pos(centerX - 20, baseY + 150).width(50).tooltip(Tooltip.create(Component.translatable("issosd.config.reset_button.tooltip"))).build();
 
         this.addRenderableWidget(widget_x);
